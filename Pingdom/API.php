@@ -213,5 +213,215 @@ class Pingdom_API {
             return $this->_doRequest($url);
             
         }
+        
+        /**
+         * Internal function to handle adding all types of check, assumes other functions
+         * have validated the data
+         * 
+         * @param Pingdom_Check $check Check object to insert
+         * @return string JSON string of result
+         */
+        public function _addCheck($check)
+        {
+            $url = "/checks";
+            $postData = $check->_prepData();
+            return $this->_doRequest($url, $postData, self::METHOD_POST);
+        }
 	
+}
+
+/**
+ * Parent Check class
+ * 
+ * 
+ */
+class Pingdom_Check
+{
+    // Required variables
+    public $name;
+    public $host;
+    public $type;
+    
+    //optional vars
+    public $paused = false;
+    public $resolution = 5;
+    public $contactIds = null;
+    public $sendToEmail = false;
+    public $sendToSms = false;
+    public $sendToTwitter = false;
+    public $sendToIphone = false;
+    public $notifyWhenDown = 2;
+    public $notifyAgainEvery = 0;
+    public $notifyWhenBack = true;
+    
+    /**
+     * Constructor uses the bare minimum options for a check, this is all you need
+     * for a check, but you can go into more detail if required
+     * 
+     * @param string $name The friendly name for the check
+     * @param string $host DNS or IP for the check to use
+     * @param string $type one of http, httpcustom, tcp, ping, dns, udp, smtp, pop3, imap (usually specified by more specific class)
+     * 
+     */
+    function __construct($name, $host, $type)
+    {
+        $this->name = $name;
+        $this->host = $host;
+        $this->type = $type;
+    }
+    
+    function _prepData()
+    {
+        $post = "";
+        
+        $post += "name=" . $this->name;
+        $post += "&host=" . $this->host;
+        $post += "&type=" . $this->type;
+        $post += "&paused=" . $this->paused;
+        $post += "&resolution=" . $this->resolution;
+        if ($this->contactIds != null)
+        {
+            $post += "&contactids=" . $this->contactIds;
+            $post += "&sendtoemail=" . $this->sendToEmail;
+            $post += "&sendtosms=" . $this->sendToSms;
+            $post += "&sendtotwitter=" . $this->sendToSms;
+            $post += "&sendtoiphone=" . $this->sendToIphone;
+            $post += "&sendnotificationwhendown=" . $this->notifyWhenDown;
+            $post += "&notifyagainevery=" . $this->notifyAgainEvery;
+            $post += "&notifywhenbackup=" . $this->notifyWhenBack;
+        }
+        
+        return $post;
+    }
+}
+
+class HTTP_Check extends Pingdom_Check
+{
+    public $url = "/";
+    public $encryption = false;
+    public $port = 80;
+    public $auth = null;
+    public $shouldContain = null;
+    public $shouldNotContain = null;
+    public $postData = null;
+    public $requestHeaders = array();
+    
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "http");
+    }
+    
+    function _prepData() {
+        $post = parent::_prepData();
+        
+        $post += "&url=" . $this->url;
+        $post += "&encryption=" . $this->encryption;
+        $post += "&port=" . $this->port;
+        if ($this->auth != null) $post += "&auth=" . $this->auth;
+        if ($this->shouldContain != null) $post += "&shouldcontain=" . $this->shouldContain;
+        if ($this->shouldNotContain != null) $post += "&shouldnotcontain=" . $this->shouldNotContain;
+        //if ($this->postData != null) $post += "&postdata=" . $this->postData;  //TODO: Find out how this should actually be formatted, how do you POST POST data?
+        
+        
+        return $post;
+    }
+    
+}
+
+class HTTP_Custom_Check extends Pingdom_Check
+{
+    public $url = "/";
+    public $encryption = false;
+    public $port = 80;
+    public $auth = null;
+    public $additionalUrls = array();
+    
+    function __construct($name, $host, $url) {
+        parent::__construct($name, $host, "httpcustom");
+        $this->url = $url;
+    }
+ 
+}
+
+class TCP_Check extends Pingdom_Check
+{
+    public $port;
+    public $stringToSend = null;
+    public $stringToExpect = null;
+    
+    function __construct($name, $host, $port) {
+        parent::__construct($name, $host, "tcp");
+        $this->port = $port;
+    }
+    
+}
+
+class Ping_Check extends Pingdom_Check
+{
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "ping");
+    }
+}
+
+class DNS_Check extends Pingdom_Check
+{
+    public $expectedIp;
+    public $nameServer;
+    
+    function __construct($name, $host, $nameServer, $expectedIp) {
+        parent::__construct($name, $host, "dns");
+        $this->nameServer = $nameServer;
+        $this->expectedIp = $expectedIp;
+    }
+}
+
+class UDP_Check extends Pingdom_Check
+{
+    public $port;
+    public $stringToSend;
+    public $stringToExpect;
+    
+    function __construct($name, $host, $port, $stringToSend, $stringToExpect) {
+        parent::__construct($name, $host, "udp");
+        $this->port = $port;
+        $this->stringToSend = $stringToSend;
+        $this->stringToExpect = $stringToExpect;
+    }
+    
+}
+
+class SMTP_Check extends Pingdom_Check
+{
+    public $port = 25;
+    public $auth = null;
+    public $stringToExpect = null;
+    public $encryption = false;
+    
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "smtp");
+    }
+ 
+}
+
+class POP3_Check extends Pingdom_Check
+{
+    public $port = 110;
+    public $stringToExpect = null;
+    public $encryption = false;
+    
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "pop3");
+    }
+  
+}
+
+class IMAP_Check extends Pingdom_Check
+{
+    public $port = 143;
+    public $stringToExpect = null;
+    public $encryption = false;
+    
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "imap");
+    }
+
 }
