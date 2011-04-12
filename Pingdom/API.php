@@ -132,21 +132,61 @@ class Pingdom_API {
 		return $return;
 	}
 	
-	
-    /**
-     * Gets a list of all checks on the account
-     *
-     * @param int $limit number of results to return (default=500, max = 25000)
-	 * @param int $offset offset for listing (requires limit to be set)
-     * @return array JSON response encoded to array
-     */
-	public function getChecks($limit = 500, $offset = 0)
-	{
-		if ($offset > 25000) throw new Exception('Limit set too high');
-		
-		$url = "/checks/?limit=" . $limit . "&offset=" . $offset;
-		
-		return $this->_doRequest($url);
-	}
+	/**
+         * Returns a list of actions(alerts) that have been generated for your account
+         * 
+         * @param int $limit number of results to return (default=100, max = 300)
+         * @param int $offset offset for listing (requires limit to be set)
+         * @param int $from Unix timestamp to count checks from
+         * @param int $to Unix timestamp to count checks up to
+         * @param string $checkIds comma separated list of check IDs
+         * @param string $contactIds comma separated list of contact IDs
+         * @param string $status comma separated list of statuses
+         * @param string $via comma separated list of methods alerts were sent to
+         */
+        public function getActions($limit = 100, $offset = 0, $from = null, $to = null, $checkIds = null, $contactIds = null, $status = null, $via = null)
+        {
+            if ($offset > 25000) throw new Exception('Limit set too high');
+
+            $url = "/actions/?limit=" . $limit . "&offset=" . $offset;
+            if ($from != null) $usr += "&from=" . $from;
+            if ($to != null) $usr += "&to=" . $to;
+            if ($checkIds != null) $usr += "&checkids=" . $checkIds;
+            if ($contactIds != null) $usr += "&contactids=" . $contactIds;
+            if ($status != null) $usr += "&status=" . $status;
+            if ($via != null) $usr += "&via=" . $via;
+
+            return $this->_doRequest($url);
+        }
+        
+        /**
+         * Returns a list of the latest error analysis results for a specified check
+         * 
+         * @param int $checkId The check ID to get analysis for
+         * @param int $limit number of results to return (default = 100)
+         * @param int $offset offset for listing
+         */
+        public function getError($checkId, $limit = 100, $offset = 0)
+        {
+            $url = "/analysis/" . $checkId . "/?limit=" . $limit . "&offset=" . $offset;
+            
+            return $this->_doRequest($url);
+        }
+        
+        /**
+        * Gets a list of all checks on the account
+        *
+        * @param int $limit number of results to return (default=500, max = 25000)
+        * @param int $offset offset for listing (requires limit to be set)
+        * @return array JSON response encoded to array
+        */
+        public function getChecks($limit = 500, $offset = 0)
+        {
+            if ($offset > 25000) throw new Exception('Limit set too high');
+
+            $url = "/checks/?limit=" . $limit . "&offset=" . $offset;
+
+            return $this->_doRequest($url);
+        }
 	
 }
