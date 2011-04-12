@@ -169,7 +169,20 @@ class Pingdom_API {
         public function getError($checkId, $limit = 100, $offset = 0)
         {
             $url = "/analysis/" . $checkId . "/?limit=" . $limit . "&offset=" . $offset;
-            
+            return $this->_doRequest($url);
+        }
+        
+        /**
+         * Returns the raw result for a specified error analysis. This data is primarily intended for internal
+         * use, but you might be interested in it as well. However, there is no real documentation for this
+         * data at the moment. In the future, we may add a new API method that provides a more user-friendly format.
+         * 
+         * @param int $checkId ID of the check
+         * @param int $analysisId ID of the analysis
+         */
+        public function getRawAnalysis($checkId, $analysisId)
+        {
+            $url = "/analysis/" . $checkId . "/" . $analysisId;
             return $this->_doRequest($url);
         }
         
@@ -185,8 +198,20 @@ class Pingdom_API {
             if ($offset > 25000) throw new Exception('Limit set too high');
 
             $url = "/checks/?limit=" . $limit . "&offset=" . $offset;
-
             return $this->_doRequest($url);
+        }
+        
+        /**
+         * Returns a detailed description of a specified check
+         * 
+         * @param int $checkId the ID of the check you wish to get more detail on (see getChecks)
+         * @return array JSON response encoded to array
+         */
+        public function getCheck($checkId)
+        {
+            $url = "/checks/" . $checkId;
+            return $this->_doRequest($url);
+            
         }
 	
 }
