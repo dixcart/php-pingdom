@@ -221,7 +221,7 @@ class Pingdom_API {
          * @param Pingdom_Check $check Check object to insert
          * @return string JSON string of result
          */
-        public function _addCheck($check)
+        public function addCheck($check)
         {
             $url = "/checks";
             $postData = $check->_prepData();
@@ -320,8 +320,14 @@ class HTTP_Check extends Pingdom_Check
         if ($this->shouldContain != null) $post += "&shouldcontain=" . $this->shouldContain;
         if ($this->shouldNotContain != null) $post += "&shouldnotcontain=" . $this->shouldNotContain;
         //if ($this->postData != null) $post += "&postdata=" . $this->postData;  //TODO: Find out how this should actually be formatted, how do you POST POST data?
-        
-        
+        if (!empty($this->requestHeaders)) {
+            $i = 0;
+            foreach($this->requestHeaders as $header)         
+            {
+                $i++;
+                $post =+ "&requestheadername" . $i . "=" . $header;
+            }
+        }
         return $post;
     }
     
