@@ -200,6 +200,20 @@ class Pingdom_API {
             $url = "/checks/?limit=" . $limit . "&offset=" . $offset;
             return $this->_doRequest($url);
         }
+
+        public function getProbes($limit = 500, $offset = 0, $onlyactive="false")
+        {
+            if ($offset > 25000) throw new Exception('Limit set too high');
+            $url = "/probes?limit=" . $limit . "&offset=" . $offset. "&onlyactive=" . $onlyactive;
+            return $this->_doRequest($url);
+        }
+ 
+        public function getTraceroute($target, $probeid = 0)
+        {
+            $url = "/traceroute". "?host=" . $target. "&probeid=" . $probeid;
+            return $this->_doRequest($url);
+        }
+
         
         /**
          * Returns a detailed description of a specified check
