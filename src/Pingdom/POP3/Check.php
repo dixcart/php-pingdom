@@ -22,24 +22,15 @@
  * @version 1
  * @license bsd
  */
-/**
- * Returns a list of all checks on an account as a JSON string
- * 
- * @package php-pingdom
- * @subpackage examples
- */
 
-DEFINE('PINGDOM_USR', 'username@email.com');
-DEFINE('PINGDOM_PWD', 'MyReallyStrongPassword');
+class Pingdom_POP3_Check extends Pingdom_Check
+{
+    public $port = 110;
+    public $stringToExpect = null;
+    public $encryption = false;
 
-require_once dirname(__FILE__).'/../src/Pingdom/Autoload.php';
-Pingdom_Autoload::register();
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "pop3");
+    }
 
-$api = new Pingdom_API(PINGDOM_USR, PINGDOM_PWD);
-try {
-    $resp = $api->getChecks();
-    echo json_encode($resp);
-} catch (Exception $e) {
-    echo "{ error: \"" . $e->getMessage() . "}";
 }
-?>
