@@ -149,12 +149,12 @@ class Pingdom_API {
 		if ($offset > 25000) throw new Exception('Limit set too high');
 
 		$url = "/actions/?limit=" . $limit . "&offset=" . $offset;
-		if ($from != null) $usr += "&from=" . $from;
-		if ($to != null) $usr += "&to=" . $to;
-		if ($checkIds != null) $usr += "&checkids=" . $checkIds;
-		if ($contactIds != null) $usr += "&contactids=" . $contactIds;
-		if ($status != null) $usr += "&status=" . $status;
-		if ($via != null) $usr += "&via=" . $via;
+		if ($from != null) $url .= "&from=" . $from;
+		if ($to != null) $url .= "&to=" . $to;
+		if ($checkIds != null) $url .= "&checkids=" . $checkIds;
+		if ($contactIds != null) $url .= "&contactids=" . $contactIds;
+		if ($status != null) $url .= "&status=" . $status;
+		if ($via != null) $url .= "&via=" . $via;
 
 		return $this->_doRequest($url);
 	}
