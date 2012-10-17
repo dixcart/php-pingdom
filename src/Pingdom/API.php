@@ -123,7 +123,7 @@ class Pingdom_API {
 			default:
 				//There was an error
 				$err = json_decode($this->_lastResponse, true);
-				throw new Exception('There was an error: ' . $err['error']['statuscode'] . ' - ' . $err['error']['statusdesc'] . ': ' . $err['error']['errormessage']);
+				throw new Exception('There was an error: ' . $err['error']['statuscode'] . ' - ' . $err['error']['statusdesc'] . (isset($err['error']['errormessage']) ? ': ' . $err['error']['errormessage'] : ''));
 				break;
 			}
 		}
