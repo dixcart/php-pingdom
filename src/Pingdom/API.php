@@ -253,6 +253,47 @@ class Pingdom_API {
         return $this->_doRequest($url);
 	}
 
+    /**
+     * Return a list of raw test results for a specified check
+     * @param Int    $checkId
+     * @param Int    $from            Start of period. Format is UNIX timestamp                                                                                 default:  1 day prior to 'to'
+     * @param Int    $to              End of period. Format is UNIX timestamp                                                                                   default:  current time
+     * @param String $probes          Filter to only show results from a list of probes. Format is a comma separated list of probe identifiers                  default:  all probes
+     * @param String $status          Filter to only show results with specified statuses. Format is a comma separated list of (down, up, unconfirmed, unknown) default:  all statuses
+     * @param Int    $limit           Number of results to show (Will be set to 1000 if the provided value is greater than 1000)                                default:  1000
+     * @param Int    $offset          Number of results to skip (Max value is 43200)                                                                            default:  0
+     * @param Bool   $includeanalysis Attach available root cause analysis identifiers to corresponding results                                                 default:  false
+     * @param Int    $maxresponse     Maximum response time (ms). If set, specified interval must not be larger than 31 days.
+     * @param Int    $minresponse     Minimum response time (ms). If set, specified interval must not be larger than 31 days.
+     * @return type
+     */
+    public function getRawCheckResults(
+            $checkId,
+            $from            = null,
+            $to              = null,
+            $probes          = null,
+            $status          = null,
+            $limit           = null,
+            $offset          = null,
+            $includeanalysis = null,
+            $maxresponse     = null,
+            $minresponse     = null )
+	{
+		$url = "/results/$checkId?";
+
+        if ($from            !== null ) $url .= "from=$from&";
+        if ($to              !== null ) $url .= "to=$to&";
+        if ($probes          !== null ) $url .= "probes=$probes&";
+        if ($status          !== null ) $url .= "status=$status&";
+        if ($limit           !== null ) $url .= "limit=$limit&";
+        if ($offset          !== null ) $url .= "offset=$offset&";
+        if ($includeanalysis !== null ) $url .= "includeanalysis=$includeanalysis&";
+        if ($maxresponse     !== null ) $url .= "maxresponse=$maxresponse&";
+        if ($minresponse     !== null ) $url .= "minresponse=$minresponse&";
+
+        return $this->_doRequest($url);
+	}
+
 
 	/**
 	 * Returns a detailed description of a specified check
