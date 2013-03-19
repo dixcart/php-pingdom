@@ -222,7 +222,7 @@ class Pingdom_API {
         if ($from !== 0) $url .= "from=$from&";
         if ($to !== null) $url .= "to=$to";
 
-        $url .= "&includeuptime=$includeuptime&bycountry=$bycountry&byprobe=$byprobe";
+        $url .= "&includeuptime=$includeuptime&bycountry=$bycountry"; //&byprobe=$byprobe";
 
         return $this->_doRequest($url);
 	}
