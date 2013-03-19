@@ -30,16 +30,16 @@ class Pingdom_API {
 	const METHOD_DELETE = 3;
 	const METHOD_PUT = 4;
 
-	const APP_KEY = "rbh7purydqixtjn7ngpyxrjwjr4sqnna";
-	const API_ADDR = "https://api.pingdom.com/api/2.0";
+	const API_ADDR = 'https://api.pingdom.com/api/2.0';
 
-	private $_apiUser;
-	private $_apiPass;
-	private $_acceptGzip;
-	private $_lastResponse;
-	private $_lastStatus;
+	protected $_apiUser;
+	protected $_apiPass;
+	protected $_apiKey;
+	protected $_acceptGzip;
+	protected $_lastResponse;
+	protected $_lastStatus;
 
-	function __construct($apiUser, $apiPass, $acceptGzip = true)
+	function __construct($apiUser, $apiPass, $apiKey, $acceptGzip = true)
 	{
 		if(!$apiUser || !$apiPass) {
 			throw new Exception('Username/Password required');
@@ -47,6 +47,7 @@ class Pingdom_API {
 
 		$this->_apiUser = $apiUser;
 		$this->_apiPass = $apiPass;
+		$this->_apiKey = $apiKey;
 		$this->_acceptGzip = $acceptGzip;
 	}
 
@@ -65,11 +66,11 @@ class Pingdom_API {
 
 		//Set app-key header
 		$headers = array(
-			sprintf("%s: %s", "App-Key", self::APP_KEY)
+			sprintf('%s: %s', 'App-Key', $this->_apiKey)
 		);
 
 		//Enable GZip encoding
-		if ($this->_acceptGzip) curl_setopt($curl, CURLOPT_ENCODING, "gzip");
+		if ($this->_acceptGzip) curl_setopt($curl, CURLOPT_ENCODING, 'gzip');
 
 		//Set URL
 		curl_setopt($curl, CURLOPT_URL, self::API_ADDR.$path);
@@ -77,22 +78,22 @@ class Pingdom_API {
 
 		switch($method) {
 			case self::METHOD_POST:
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-			break;
+                curl_setopt($curl, CURLOPT_POST, true);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+                break;
 			case self::METHOD_DELETE:
-			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-			break;
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+                break;
 			case self::METHOD_PUT:
-			curl_setopt($curl, CURLOPT_PUT, true);
-			$putData = tmpfile();
-			fwrite($putData, $data);
-			fseek($putData, 0);
-			curl_setopt($curl, CURLOPT_INFILE, $putData);
-			curl_setopt($curl, CURLOPT_INFILESIZE, strlen($data));
-			break;
+                curl_setopt($curl, CURLOPT_PUT, true);
+                $putData = tmpfile();
+                fwrite($putData, $data);
+                fseek($putData, 0);
+                curl_setopt($curl, CURLOPT_INFILE, $putData);
+                curl_setopt($curl, CURLOPT_INFILESIZE, strlen($data));
+                break;
 			default:
-			break;
+                break;
 		}
 
 		//Set headers
@@ -106,8 +107,8 @@ class Pingdom_API {
 
 		//Handle response and status codes
 		$curlinfo = curl_getinfo($curl);
-		if (!empty($curlinfo["http_code"])) {
-			$this->_lastStatus = $curlinfo["http_code"];
+		if (!empty($curlinfo['http_code'])) {
+			$this->_lastStatus = $curlinfo['http_code'];
 			switch ($this->_lastStatus) {
 			case '200':
 				//All ok
@@ -122,7 +123,7 @@ class Pingdom_API {
 			default:
 				//There was an error
 				$err = json_decode($this->_lastResponse, true);
-				throw new Exception('There was an error: ' . $err['error']['statuscode'] . " - " . $err['error']['statusdesc'] . ": " . $err['error']['errormessage']);
+				throw new Exception('There was an error: ' . $err['error']['statuscode'] . ' - ' . $err['error']['statusdesc'] . (isset($err['error']['errormessage']) ? ': ' . $err['error']['errormessage'] : ''));
 				break;
 			}
 		}
@@ -148,13 +149,13 @@ class Pingdom_API {
 	{
 		if ($offset > 25000) throw new Exception('Limit set too high');
 
-		$url = "/actions/?limit=" . $limit . "&offset=" . $offset;
-		if ($from != null) $usr += "&from=" . $from;
-		if ($to != null) $usr += "&to=" . $to;
-		if ($checkIds != null) $usr += "&checkids=" . $checkIds;
-		if ($contactIds != null) $usr += "&contactids=" . $contactIds;
-		if ($status != null) $usr += "&status=" . $status;
-		if ($via != null) $usr += "&via=" . $via;
+		$url = '/actions/?limit=' . $limit . '&offset=' . $offset;
+		if ($from != null) $url .= '&from=' . $from;
+		if ($to != null) $url .= '&to=' . $to;
+		if ($checkIds != null) $url .= '&checkids=' . $checkIds;
+		if ($contactIds != null) $url .= '&contactids=' . $contactIds;
+		if ($status != null) $url .= '&status=' . $status;
+		if ($via != null) $url .= '&via=' . $via;
 
 		return $this->_doRequest($url);
 	}
@@ -168,7 +169,7 @@ class Pingdom_API {
 	 */
 	public function getError($checkId, $limit = 100, $offset = 0)
 	{
-		$url = "/analysis/" . $checkId . "/?limit=" . $limit . "&offset=" . $offset;
+		$url = '/analysis/' . $checkId . '/?limit=' . $limit . '&offset=' . $offset;
 		return $this->_doRequest($url);
 	}
 
@@ -182,7 +183,7 @@ class Pingdom_API {
 	 */
 	public function getRawAnalysis($checkId, $analysisId)
 	{
-		$url = "/analysis/" . $checkId . "/" . $analysisId;
+		$url = '/analysis/' . $checkId . '/' . $analysisId;
 		return $this->_doRequest($url);
 	}
 
@@ -197,21 +198,59 @@ class Pingdom_API {
 	{
 		if ($offset > 25000) throw new Exception('Limit set too high');
 
-		$url = "/checks/?limit=" . $limit . "&offset=" . $offset;
+		$url = '/checks/?limit=' . $limit . '&offset=' . $offset;
 		return $this->_doRequest($url);
 	}
 
-	public function getProbes($limit = 500, $offset = 0, $onlyactive="false")
+	public function getProbes($limit = 500, $offset = 0, $onlyactive='false')
 	{
 		if ($offset > 25000) throw new Exception('Limit set too high');
-		$url = "/probes?limit=" . $limit . "&offset=" . $offset. "&onlyactive=" . $onlyactive;
+		$url = '/probes?limit=' . $limit . '&offset=' . $offset. '&onlyactive=' . $onlyactive;
 		return $this->_doRequest($url);
 	}
 
 	public function getTraceroute($target, $probeid = 0)
 	{
-		$url = "/traceroute". "?host=" . $target. "&probeid=" . $probeid;
+		$url = '/traceroute'. '?host=' . $target. '&probeid=' . $probeid;
 		return $this->_doRequest($url);
+	}
+
+    public function getSummaryAverage($checkId, $from = 0, $to = null, $includeuptime = 'false', $bycountry = 'false', $byprobe = 'false')
+	{
+		$url = "/summary.average/$checkId?";
+
+        if ($from !== 0) $url .= "from=$from&";
+        if ($to !== null) $url .= "to=$to";
+
+        $url .= "&includeuptime=$includeuptime&bycountry=$bycountry"; //&byprobe=$byprobe";
+
+        return $this->_doRequest($url);
+	}
+
+    public function getSummaryPerformance($checkId, $from = null, $to = null, $resolution = 'hour', $includeuptime = 'false', $probes = null, $order = 'asc')
+	{
+        $url = "/summary.performance/$checkId?";
+
+        if ($from !== null) $url .= "from=$from&";
+        if ($to !== null) $url .= "to=$to&";
+        if ($probes !== null) $url .= "probes=$probes&";
+        if ($includeuptime !== 'false') $url .= "includeuptime=$includeuptime&";
+
+        $url .= "resolution=$resolution&order=$order";
+
+        return $this->_doRequest($url);
+	}
+
+    public function getSummaryHoursOfDay($checkId, $from = null, $to = null, $probes = null, $uselocaltime = 'false')
+	{
+        $url = "/summary.hoursofday/$checkId?";
+
+        if ($from !== null) $url .= "from=$from&";
+        if ($to !== null) $url .= "to=$to&";
+        if ($probes !== null) $url .= "probes=$probes&";
+        if ($uselocaltime !== 'false') $url .= "uselocaltime=$uselocaltime&";
+
+        return $this->_doRequest($url);
 	}
 
 
@@ -223,7 +262,7 @@ class Pingdom_API {
 	 */
 	public function getCheck($checkId)
 	{
-		$url = "/checks/" . $checkId;
+		$url = '/checks/' . $checkId;
 		return $this->_doRequest($url);
 
 	}
@@ -237,7 +276,7 @@ class Pingdom_API {
 	 */
 	public function addCheck($check)
 	{
-		$url = "/checks";
+		$url = '/checks';
 		$postData = $check->_prepData();
 		return $this->_doRequest($url, $postData, self::METHOD_POST);
 	}
