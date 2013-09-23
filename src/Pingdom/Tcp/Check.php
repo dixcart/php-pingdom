@@ -22,18 +22,20 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Tcp;
 
-class Pingdom_HTTP_Custom_Check extends Pingdom_Check
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-    public $url = "/";
-    public $encryption = false;
-    public $port = 80;
-    public $auth = null;
-    public $additionalUrls = array();
+    public $port;
+    public $stringToSend = null;
+    public $stringToExpect = null;
 
-    function __construct($name, $host, $url) {
-        parent::__construct($name, $host, "httpcustom");
-        $this->url = $url;
+    function __construct($name, $host, $port)
+    {
+        parent::__construct($name, $host, "tcp");
+        $this->port = $port;
     }
 
 }

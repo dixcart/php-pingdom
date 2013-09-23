@@ -22,15 +22,19 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Smtp;
 
-class Pingdom_SMTP_Check extends Pingdom_Check
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
     public $port = 25;
     public $auth = null;
     public $stringToExpect = null;
     public $encryption = false;
 
-    function __construct($name, $host) {
+    function __construct($name, $host)
+    {
         parent::__construct($name, $host, "smtp");
     }
 

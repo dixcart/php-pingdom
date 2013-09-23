@@ -22,15 +22,22 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Udp;
 
-class Pingdom_POP3_Check extends Pingdom_Check
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-    public $port = 110;
-    public $stringToExpect = null;
-    public $encryption = false;
+    public $port;
+    public $stringToSend;
+    public $stringToExpect;
 
-    function __construct($name, $host) {
-        parent::__construct($name, $host, "pop3");
+    function __construct($name, $host, $port, $stringToSend, $stringToExpect)
+    {
+        parent::__construct($name, $host, "udp");
+        $this->port = $port;
+        $this->stringToSend = $stringToSend;
+        $this->stringToExpect = $stringToExpect;
     }
 
 }

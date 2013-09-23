@@ -22,16 +22,19 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Pop3;
 
-class Pingdom_TCP_Check extends Pingdom_Check
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-    public $port;
-    public $stringToSend = null;
+    public $port = 110;
     public $stringToExpect = null;
+    public $encryption = false;
 
-    function __construct($name, $host, $port) {
-        parent::__construct($name, $host, "tcp");
-        $this->port = $port;
+    function __construct($name, $host)
+    {
+        parent::__construct($name, $host, "pop3");
     }
 
 }

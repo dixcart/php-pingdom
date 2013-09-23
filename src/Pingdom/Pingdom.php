@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Pingdom API PHP binding
  * (c) 2011 Dixcart Technical Solutions Limited
@@ -22,14 +21,12 @@
  * @version 1
  * @license bsd
  */
-
+namespace Pingdom;
 
 /**
  * Parent Check class
- *
- *
  */
-class Pingdom_Check
+class Pingdom
 {
     // Required variables
     public $name;
@@ -68,21 +65,20 @@ class Pingdom_Check
     {
         $post = "";
 
-        $post += "name=" . $this->name;
-        $post += "&host=" . $this->host;
-        $post += "&type=" . $this->type;
-        $post += "&paused=" . $this->paused;
-        $post += "&resolution=" . $this->resolution;
-        if ($this->contactIds != null)
-        {
-            $post += "&contactids=" . $this->contactIds;
-            $post += "&sendtoemail=" . $this->sendToEmail;
-            $post += "&sendtosms=" . $this->sendToSms;
-            $post += "&sendtotwitter=" . $this->sendToSms;
-            $post += "&sendtoiphone=" . $this->sendToIphone;
-            $post += "&sendnotificationwhendown=" . $this->notifyWhenDown;
-            $post += "&notifyagainevery=" . $this->notifyAgainEvery;
-            $post += "&notifywhenbackup=" . $this->notifyWhenBack;
+        $post .= "name=" . $this->name;
+        $post .= "&host=" . $this->host;
+        $post .= "&type=" . $this->type;
+        $post .= "&paused=" . $this->paused;
+        $post .= "&resolution=" . $this->resolution;
+        if ($this->contactIds != null) {
+            $post .= "&contactids=" . $this->contactIds;
+            $post .= "&sendtoemail=" . $this->sendToEmail;
+            $post .= "&sendtosms=" . $this->sendToSms;
+            $post .= "&sendtotwitter=" . $this->sendToSms;
+            $post .= "&sendtoiphone=" . $this->sendToIphone;
+            $post .= "&sendnotificationwhendown=" . $this->notifyWhenDown;
+            $post .= "&notifyagainevery=" . $this->notifyAgainEvery;
+            $post .= "&notifywhenbackup=" . $this->notifyWhenBack;
         }
 
         return $post;

@@ -22,45 +22,19 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Imap;
 
-/**
- * A fallback Autoload class for loading all the Pingdom API classes.
- *
- * @author Justin Rainbow <justin.rainbow@gmail.com>
- */
-class Pingdom_Autoload
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-	/**
-	 * Registers this instance as an autoloader.
-	 *
-	 * @param Boolean $prepend Whether to prepend the autoloader or not
-	 */
-	static public function register($prepend = false)
-	{
-		spl_autoload_register('Pingdom_Autoload::loadClass', true, $prepend);
-	}
+    public $port = 143;
+    public $stringToExpect = null;
+    public $encryption = false;
 
-	/**
-	 * Unregisters this instance as an autoloader.
-	 */
-	static public function unregister()
-	{
-		spl_autoload_unregister('Pingdom_Autoload::loadClass');
-	}
+    function __construct($name, $host)
+    {
+        parent::__construct($name, $host, "imap");
+    }
 
-	/**
-	 * Loads the given class or interface.
-	 *
-	 * @param string $class The name of the class
-	 * @return Boolean|null True, if loaded
-	 */
-	static public function loadClass($class)
-	{
-		if (0 === strpos($class, 'Pingdom_')) {
-			$file = dirname(__FILE__) . '/' . str_replace('_', DIRECTORY_SEPARATOR, substr($class, 8)) . '.php';
-
-			require $file;
-			return true;
-		}
-	}
 }

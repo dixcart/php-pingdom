@@ -22,10 +22,14 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Ping;
 
-class Pingdom_Ping_Check extends Pingdom_Check
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-    function __construct($name, $host) {
+    function __construct($name, $host)
+    {
         parent::__construct($name, $host, "ping");
     }
 }

@@ -22,15 +22,22 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Http\Custom;
 
-class Pingdom_IMAP_Check extends Pingdom_Check
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-    public $port = 143;
-    public $stringToExpect = null;
+    public $url = "/";
     public $encryption = false;
+    public $port = 80;
+    public $auth = null;
+    public $additionalUrls = array();
 
-    function __construct($name, $host) {
-        parent::__construct($name, $host, "imap");
+    function __construct($name, $host, $url)
+    {
+        parent::__construct($name, $host, "httpcustom");
+        $this->url = $url;
     }
 
 }
