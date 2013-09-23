@@ -23,6 +23,7 @@
  * @license bsd
  */
 namespace Pingdom\Http\Custom;
+
 use Pingdom\Pingdom;
 
 class Check extends Pingdom
@@ -33,7 +34,8 @@ class Check extends Pingdom
     public $auth = null;
     public $additionalUrls = array();
 
-    function __construct($name, $host, $url) {
+    function __construct($name, $host, $url)
+    {
         parent::__construct($name, $host, "httpcustom");
         $this->url = $url;
     }

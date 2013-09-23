@@ -23,6 +23,7 @@
  * @license bsd
  */
 namespace Pingdom\Tcp;
+
 use Pingdom\Pingdom;
 
 class Check extends Pingdom
@@ -31,7 +32,8 @@ class Check extends Pingdom
     public $stringToSend = null;
     public $stringToExpect = null;
 
-    function __construct($name, $host, $port) {
+    function __construct($name, $host, $port)
+    {
         parent::__construct($name, $host, "tcp");
         $this->port = $port;
     }

@@ -24,6 +24,7 @@
  */
 
 namespace Pingdom\Http;
+
 use Pingdom\Pingdom;
 
 class Check extends Pingdom
@@ -37,11 +38,13 @@ class Check extends Pingdom
     public $postData = null;
     public $requestHeaders = array();
 
-    function __construct($name, $host) {
+    function __construct($name, $host)
+    {
         parent::__construct($name, $host, "http");
     }
 
-    function _prepData() {
+    function _prepData()
+    {
         $post = parent::_prepData();
 
         $post .= "&url=" . $this->url;
@@ -53,10 +56,9 @@ class Check extends Pingdom
         //if ($this->postData != null) $post += "&postdata=" . $this->postData;  //TODO: Find out how this should actually be formatted, how do you POST POST data?
         if (!empty($this->requestHeaders)) {
             $i = 0;
-            foreach($this->requestHeaders as $header)
-            {
+            foreach ($this->requestHeaders as $header) {
                 $i++;
-                $post =+ "&requestheadername" . $i . "=" . $header;
+                $post = +"&requestheadername" . $i . "=" . $header;
             }
         }
         return $post;

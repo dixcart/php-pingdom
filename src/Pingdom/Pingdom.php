@@ -70,8 +70,7 @@ class Pingdom
         $post .= "&type=" . $this->type;
         $post .= "&paused=" . $this->paused;
         $post .= "&resolution=" . $this->resolution;
-        if ($this->contactIds != null)
-        {
+        if ($this->contactIds != null) {
             $post .= "&contactids=" . $this->contactIds;
             $post .= "&sendtoemail=" . $this->sendToEmail;
             $post .= "&sendtosms=" . $this->sendToSms;

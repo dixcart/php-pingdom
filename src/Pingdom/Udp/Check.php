@@ -23,6 +23,7 @@
  * @license bsd
  */
 namespace Pingdom\Udp;
+
 use Pingdom\Pingdom;
 
 class Check extends Pingdom
@@ -31,7 +32,8 @@ class Check extends Pingdom
     public $stringToSend;
     public $stringToExpect;
 
-    function __construct($name, $host, $port, $stringToSend, $stringToExpect) {
+    function __construct($name, $host, $port, $stringToSend, $stringToExpect)
+    {
         parent::__construct($name, $host, "udp");
         $this->port = $port;
         $this->stringToSend = $stringToSend;

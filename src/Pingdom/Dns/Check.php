@@ -23,6 +23,7 @@
  */
 
 namespace Pingdom\Dns;
+
 use Pingdom\Pingdom;
 
 class Check extends Pingdom
@@ -30,7 +31,8 @@ class Check extends Pingdom
     public $expectedIp;
     public $nameServer;
 
-    function __construct($name, $host, $nameServer, $expectedIp) {
+    function __construct($name, $host, $nameServer, $expectedIp)
+    {
         parent::__construct($name, $host, "dns");
         $this->nameServer = $nameServer;
         $this->expectedIp = $expectedIp;

@@ -23,6 +23,7 @@
  * @license bsd
  */
 namespace Pingdom\Imap;
+
 use Pingdom\Pingdom;
 
 class Check extends Pingdom
@@ -31,7 +32,8 @@ class Check extends Pingdom
     public $stringToExpect = null;
     public $encryption = false;
 
-    function __construct($name, $host) {
+    function __construct($name, $host)
+    {
         parent::__construct($name, $host, "imap");
     }
 
