@@ -22,45 +22,18 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Tcp;
+use Pingdom\Pingdom;
 
-/**
- * A fallback Autoload class for loading all the Pingdom API classes.
- *
- * @author Justin Rainbow <justin.rainbow@gmail.com>
- */
-class Pingdom_Autoload
+class Check extends Pingdom
 {
-	/**
-	 * Registers this instance as an autoloader.
-	 *
-	 * @param Boolean $prepend Whether to prepend the autoloader or not
-	 */
-	static public function register($prepend = false)
-	{
-		spl_autoload_register('Pingdom_Autoload::loadClass', true, $prepend);
-	}
+    public $port;
+    public $stringToSend = null;
+    public $stringToExpect = null;
 
-	/**
-	 * Unregisters this instance as an autoloader.
-	 */
-	static public function unregister()
-	{
-		spl_autoload_unregister('Pingdom_Autoload::loadClass');
-	}
+    function __construct($name, $host, $port) {
+        parent::__construct($name, $host, "tcp");
+        $this->port = $port;
+    }
 
-	/**
-	 * Loads the given class or interface.
-	 *
-	 * @param string $class The name of the class
-	 * @return Boolean|null True, if loaded
-	 */
-	static public function loadClass($class)
-	{
-		if (0 === strpos($class, 'Pingdom_')) {
-			$file = dirname(__FILE__) . '/' . str_replace('_', DIRECTORY_SEPARATOR, substr($class, 8)) . '.php';
-
-			require $file;
-			return true;
-		}
-	}
 }

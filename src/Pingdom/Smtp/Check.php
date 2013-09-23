@@ -22,8 +22,10 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Smtp;
+use Pingdom\Pingdom;
 
-class Pingdom_SMTP_Check extends Pingdom_Check
+class Check extends Pingdom
 {
     public $port = 25;
     public $auth = null;

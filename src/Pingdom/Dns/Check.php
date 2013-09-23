@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Pingdom API PHP binding
  * (c) 2011 Dixcart Technical Solutions Limited
@@ -23,14 +22,17 @@
  * @license bsd
  */
 
-class Pingdom_POP3_Check extends Pingdom_Check
+namespace Pingdom\Dns;
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
-    public $port = 110;
-    public $stringToExpect = null;
-    public $encryption = false;
+    public $expectedIp;
+    public $nameServer;
 
-    function __construct($name, $host) {
-        parent::__construct($name, $host, "pop3");
+    function __construct($name, $host, $nameServer, $expectedIp) {
+        parent::__construct($name, $host, "dns");
+        $this->nameServer = $nameServer;
+        $this->expectedIp = $expectedIp;
     }
-
 }

@@ -23,7 +23,10 @@
  * @license bsd
  */
 
-class Pingdom_HTTP_Check extends Pingdom_Check
+namespace Pingdom\Http;
+use Pingdom\Pingdom;
+
+class Check extends Pingdom
 {
     public $url = "/";
     public $encryption = false;
@@ -41,12 +44,12 @@ class Pingdom_HTTP_Check extends Pingdom_Check
     function _prepData() {
         $post = parent::_prepData();
 
-        $post += "&url=" . $this->url;
-        $post += "&encryption=" . $this->encryption;
-        $post += "&port=" . $this->port;
-        if ($this->auth != null) $post += "&auth=" . $this->auth;
-        if ($this->shouldContain != null) $post += "&shouldcontain=" . $this->shouldContain;
-        if ($this->shouldNotContain != null) $post += "&shouldnotcontain=" . $this->shouldNotContain;
+        $post .= "&url=" . $this->url;
+        $post .= "&encryption=" . $this->encryption;
+        $post .= "&port=" . $this->port;
+        if ($this->auth != null) $post .= "&auth=" . $this->auth;
+        if ($this->shouldContain != null) $post .= "&shouldcontain=" . $this->shouldContain;
+        if ($this->shouldNotContain != null) $post .= "&shouldnotcontain=" . $this->shouldNotContain;
         //if ($this->postData != null) $post += "&postdata=" . $this->postData;  //TODO: Find out how this should actually be formatted, how do you POST POST data?
         if (!empty($this->requestHeaders)) {
             $i = 0;

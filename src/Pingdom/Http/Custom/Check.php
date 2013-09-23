@@ -22,8 +22,10 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Http\Custom;
+use Pingdom\Pingdom;
 
-class Pingdom_HTTP_Custom_Check extends Pingdom_Check
+class Check extends Pingdom
 {
     public $url = "/";
     public $encryption = false;

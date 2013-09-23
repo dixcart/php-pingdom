@@ -22,15 +22,17 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Pop3;
+use Pingdom\Pingdom;
 
-class Pingdom_IMAP_Check extends Pingdom_Check
+class Check extends Pingdom
 {
-    public $port = 143;
+    public $port = 110;
     public $stringToExpect = null;
     public $encryption = false;
 
     function __construct($name, $host) {
-        parent::__construct($name, $host, "imap");
+        parent::__construct($name, $host, "pop3");
     }
 
 }

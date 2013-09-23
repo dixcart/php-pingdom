@@ -1,0 +1,19 @@
+{
+    "name": "dixcart/php-pingdom",
+    "type": "library",
+    "description": "PHP Pingdom Api",
+    "keywords": ["pingdom"],
+    "authors": [
+        {
+            "name": "Surrey Business IT"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    }
+}

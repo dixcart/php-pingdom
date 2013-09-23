@@ -22,15 +22,20 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Udp;
+use Pingdom\Pingdom;
 
-class Pingdom_DNS_Check extends Pingdom_Check
+class Check extends Pingdom
 {
-    public $expectedIp;
-    public $nameServer;
+    public $port;
+    public $stringToSend;
+    public $stringToExpect;
 
-    function __construct($name, $host, $nameServer, $expectedIp) {
-        parent::__construct($name, $host, "dns");
-        $this->nameServer = $nameServer;
-        $this->expectedIp = $expectedIp;
+    function __construct($name, $host, $port, $stringToSend, $stringToExpect) {
+        parent::__construct($name, $host, "udp");
+        $this->port = $port;
+        $this->stringToSend = $stringToSend;
+        $this->stringToExpect = $stringToExpect;
     }
+
 }

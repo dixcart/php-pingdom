@@ -22,16 +22,17 @@
  * @version 1
  * @license bsd
  */
+namespace Pingdom\Imap;
+use Pingdom\Pingdom;
 
-class Pingdom_TCP_Check extends Pingdom_Check
+class Check extends Pingdom
 {
-    public $port;
-    public $stringToSend = null;
+    public $port = 143;
     public $stringToExpect = null;
+    public $encryption = false;
 
-    function __construct($name, $host, $port) {
-        parent::__construct($name, $host, "tcp");
-        $this->port = $port;
+    function __construct($name, $host) {
+        parent::__construct($name, $host, "imap");
     }
 
 }
